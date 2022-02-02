@@ -1,5 +1,5 @@
 .DEFAULT_GOAL=def
-VERSION := v0.0.2
+VERSION := v0.0.3
 GIT_COMMIT := $(shell git rev-parse HEAD)
 BUILD_DATE := $(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
 

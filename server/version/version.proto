@@ -5,7 +5,7 @@ option go_package = "github.com/rkrmr33/template-hub/pkg/api/version";
 // Version Service
 //
 // The Version API is used to get version information from the server.
-package version;
+package template.hub.version;
 
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";

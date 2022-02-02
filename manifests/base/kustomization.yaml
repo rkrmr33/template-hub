@@ -3,7 +3,7 @@ kind: Kustomization
 
 images:
   - name: quay.io/roikramer120/template-hub
-    newTag: v0.0.2
+    newTag: v0.0.3
 
 resources:
 - rbac

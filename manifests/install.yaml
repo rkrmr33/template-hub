@@ -62,7 +62,7 @@ spec:
               key: rootPath
               name: template-hub-registry-server-cm
               optional: true
-        image: quay.io/roikramer120/template-hub:v0.0.2
+        image: quay.io/roikramer120/template-hub:v0.0.3
         imagePullPolicy: Always
         livenessProbe:
           httpGet:

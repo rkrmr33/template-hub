@@ -7,9 +7,9 @@
   ],
   "swagger": "2.0",
   "info": {
-    "description": "TemplateHub registry API Specification version: v0.0.2",
+    "description": "TemplateHub registry API Specification version: v0.0.3",
     "title": "TemplateHub registry API Specification",
-    "version": "v0.0.2"
+    "version": "v0.0.3"
   },
   "paths": {
     "/api/v1/registry/{name}": {

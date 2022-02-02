@@ -5,7 +5,7 @@ option go_package = "github.com/rkrmr33/template-hub/pkg/api/registry";
 // Registry Service
 //
 // The Registry API provides access to environment registry
-package registry;
+package template.hub.registry;
 
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
