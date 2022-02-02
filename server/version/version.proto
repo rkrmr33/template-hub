@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option go_package = "github.com/rkrmr33/template-hub/pkg/api/version";
+
+// Version Service
+//
+// The Version API is used to get version information from the server.
+package version;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+// VersionService returns the server version information.
+service VersionService {
+    // Version returns the version information of the server.
+    rpc Version(google.protobuf.Empty) returns (VersionResponse) {
+        option (google.api.http) = {
+            get: "/api/version"
+        };
+    }
+}
+
+// VersionMessage represents the version of the server
+message VersionResponse {
+    string Version = 1;
+    string BuildDate = 2;
+    string GitCommit = 3;
+    string GoVersion = 4;
+    string Compiler = 5;
+}

@@ -1,0 +1,99 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: template-hub-registry-server-sa
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: template-hub-registry-server
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: template-hub-registry-server
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: template-hub-registry-server
+subjects:
+- kind: ServiceAccount
+  name: template-hub-registry-server-sa
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: template-hub-registry-server-cm
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: template-hub-registry-server
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+  - name: https
+    port: 443
+    targetPort: http
+  selector:
+    app: template-hub-registry-server
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: template-hub-registry-server
+spec:
+  selector:
+    matchLabels:
+      app: template-hub-registry-server
+  template:
+    metadata:
+      labels:
+        app: template-hub-registry-server
+    spec:
+      containers:
+      - env:
+        - name: TEMPLATE_HUB_ROOT_PATH
+          valueFrom:
+            configMapKeyRef:
+              key: rootPath
+              name: template-hub-registry-server-cm
+              optional: true
+        image: quay.io/roikramer120/template-hub:v0.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8083
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        name: server
+        ports:
+        - containerPort: 8083
+          name: http
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8083
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 800m
+            memory: 2048Mi
+          requests:
+            cpu: 200m
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+      securityContext:
+        fsGroup: 10001
+        runAsGroup: 10001
+        runAsNonRoot: true
+        runAsUser: 10001
+      serviceAccount: template-hub-registry-server-sa
+      serviceAccountName: template-hub-registry-server-sa
+      terminationGracePeriodSeconds: 10

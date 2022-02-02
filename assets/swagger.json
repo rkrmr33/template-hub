@@ -1,0 +1,172 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "TemplateHub registry API Specification version: v0.0.1",
+    "title": "TemplateHub registry API Specification",
+    "version": "v0.0.1"
+  },
+  "paths": {
+    "/api/v1/registry/{name}": {
+      "get": {
+        "tags": [
+          "RegistryService"
+        ],
+        "summary": "Pull pulls an environment",
+        "operationId": "RegistryService_Pull",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The name of the environment to pull",
+            "name": "name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "title": "Stream result of registryPullResponse",
+              "properties": {
+                "error": {
+                  "$ref": "#/definitions/runtimeStreamError"
+                },
+                "result": {
+                  "$ref": "#/definitions/registryPullResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        }
+      }
+    },
+    "/api/version": {
+      "get": {
+        "tags": [
+          "VersionService"
+        ],
+        "summary": "Version returns the version information of the server.",
+        "operationId": "VersionService_Version",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/versionVersionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "registryPullResponse": {
+      "type": "object",
+      "title": "PullResponse a response for pull request",
+      "properties": {
+        "chunk": {
+          "type": "string",
+          "format": "byte",
+          "title": "Chunk of data"
+        }
+      }
+    },
+    "runtimeError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        },
+        "error": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "runtimeStreamError": {
+      "type": "object",
+      "properties": {
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        },
+        "grpc_code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "http_code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "http_status": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "versionVersionResponse": {
+      "type": "object",
+      "title": "VersionMessage represents the version of the server",
+      "properties": {
+        "BuildDate": {
+          "type": "string"
+        },
+        "Compiler": {
+          "type": "string"
+        },
+        "GitCommit": {
+          "type": "string"
+        },
+        "GoVersion": {
+          "type": "string"
+        },
+        "Version": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

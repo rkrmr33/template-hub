@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option go_package = "github.com/rkrmr33/template-hub/pkg/api/registry";
+
+// Registry Service
+//
+// The Registry API provides access to environment registry
+package registry;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+// RegistryService
+service RegistryService {
+    // Pull pulls an environment
+    rpc Pull(PullRequest) returns (stream PullResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/registry/{name}"
+        };
+    }
+}
+
+// PullRequest a request to pull an environment
+message PullRequest {
+    // The name of the environment to pull
+    string name = 1;
+}
+
+// PullResponse a response for pull request
+message PullResponse {
+    // Chunk of data
+    bytes chunk = 1;
+}

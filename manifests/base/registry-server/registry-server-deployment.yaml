@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: template-hub-registry-server
+spec:
+  selector:
+    matchLabels:
+      app: template-hub-registry-server
+  template:
+    metadata:
+      labels:
+        app: template-hub-registry-server
+    spec:
+      serviceAccountName: template-hub-registry-server-sa
+      serviceAccount: template-hub-registry-server-sa
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+      containers:
+        - name: server
+          image: quay.io/roikramer120/template-hub
+          env:
+            - name: TEMPLATE_HUB_ROOT_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: template-hub-registry-server-cm
+                  key: rootPath
+                  optional: true
+          securityContext:
+            allowPrivilegeEscalation: false
+          ports:
+            - name: http
+              containerPort: 8083
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8083
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8083
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: 800m
+              memory: 2048Mi
+            requests:
+              cpu: 200m
+              memory: 256Mi
+          imagePullPolicy: Always
+      terminationGracePeriodSeconds: 10
